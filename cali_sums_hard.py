@@ -17,7 +17,7 @@ def word_to_number(word):
     return word_to_number_mapping.get(word.lower(), word)
 
 def ff_digit(s):
-    pattern = r'(?:zero|one|two|three|four|five|six|seven|eight|nine|\d+)'
+    pattern = r'(?:one|two|three|four|five|six|seven|eight|nine|\d)'
     digits = re.search(pattern, s, re.IGNORECASE)
     if digits:
         series = digits.group(0)
@@ -29,14 +29,12 @@ def ff_digit(s):
         return None
 
 def fl_digit(s):
-    # Match a combination of words and digits
-    pattern = r'(?:zero|one|two|three|four|five|six|seven|eight|nine|\d+)'
+    pattern = r'(?:one|two|three|four|five|six|seven|eight|nine|\d)'
     matches = re.findall(pattern, s, re.IGNORECASE)
 
     if matches:
         last_match = matches[-1]
 
-        # Check if the last match is a digit or a word, and convert if necessary
         if last_match.isdigit() or last_match.lower() in word_to_number_mapping:
             return word_to_number(last_match.lower())
         else:
@@ -44,14 +42,52 @@ def fl_digit(s):
     else:
         return None
     
+def only_one(str):
+    pattern = r'(?:one|two|three|four|five|six|seven|eight|nine|\d)'
+    matches = re.findall(pattern, str, re.IGNORECASE)
+    if len(matches) == 1:
+        return True
+    return False
+
+def edgecase(str):
+    pattern = r'(?:oneight|twone|threeight|fiveight|sevenine|eightwo|nineight|)'
+    bitches = re.findall(pattern,str,re.IGNORECASE)
+    case = bitches[0]
+    if len(bitches) != 0:
+        if case == "oneight":
+            return [True,18]
+        elif case == "twone":
+            return [True,21]
+        elif case == "threeight":
+            return [True,38]
+        elif case == "fiveight":
+            return [True,58]
+        elif case == "sevenine":
+            return [True,79]
+        elif case == "eightwo":
+            return [True,82]
+        elif case == "nineight":
+            return [True,98]
+        else:
+            return [None, None]
+
 def sum(cali, sum = 0):
     with open(cali) as file:
         for line in file:
-            first = ff_digit(line)
-            last = fl_digit(line)
+            line = line.strip()
+            edge = edgecase(line)
+            if edge[0] == True:
+                sum += edge[1]
+            elif only_one(line) == True:
+                sum += (int(ff_digit(line)) * 11)
+            else:
+                first = int(ff_digit(line))
+                last = int(fl_digit(line))
+                sum += (first * 10 + last)
+        return sum
     
 def main():
-    print(fl_digit("one1twonine8"))
+    print(sum("calibrations.txt"))
 
 main()
 

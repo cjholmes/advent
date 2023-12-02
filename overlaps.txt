@@ -1,0 +1,11 @@
+one - oneight
+two - twone
+three threeight
+four -
+five fiveight
+six -
+seven sevenine
+eight eightwo
+nine nineight
+
+

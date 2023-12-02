@@ -43,7 +43,7 @@ def sum(cali, sum = 0):
     return sum
 
 def main():
-    answer = sum("data/calibrations.txt")
+    answer = sum("calibrations.txt")
     print(answer)
     
 main()
